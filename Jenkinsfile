@@ -38,6 +38,19 @@ sh 'git merge development'
 echo 'Git Push to Origin'
 sh 'git push origin master'
 }
+post {
+success {
+emailext(
+subject: "${env.JOB_NAME} [${env.BUILD_NUMBER}] Development
+Promoted to Master",
+body: """<p>'${env.JOB_NAME} [${env.BUILD_NUMBER}]'
+Development Promoted to Master":</p>
+<p>Check console output at <a href='${env.BUILD_URL}'>${env.
+JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
+to: "lmaly@odecee.com.au"
+)
+}
+}
 }
 stage('Tagging the Release') {
 when {
@@ -46,6 +59,19 @@ branch 'master'
 steps {
 sh "git tag rectangle-${env.MAJOR_VERSION}.${BUILD_NUMBER}"
 sh "git push origin rectangle-${env.MAJOR_VERSION}.${BUILD_NUMBER}"
+}
+post {
+success {
+emailext(
+subject: "${env.JOB_NAME} [${env.BUILD_NUMBER}] NEW
+RELEASE",
+body: """<p>'${env.JOB_NAME} [${env.BUILD_NUMBER}]' NEW
+RELEASE":</p>
+<p>Check console output at <a href='${env.BUILD_URL}'>${env.
+JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
+to: "lmaly@odecee.com.au"
+)
+}
 }
 }
 }
