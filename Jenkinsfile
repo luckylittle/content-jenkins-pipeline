@@ -49,3 +49,4 @@ sh "git push origin rectangle-${env.MAJOR_VERSION}.${BUILD_NUMBER}"
 }
 }
 }
+}
